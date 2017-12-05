@@ -17,95 +17,207 @@ from tensorpack.tfutils.summary import *
 from tensorpack.utils.gpu import get_nr_gpu
 from tensorpack.dataflow.base import RNGDataFlow
 
-def get_data():
-    dirToView = "./csvfiles/"
-    i = 0
-    data = []
-    for dirpath,_,filenames in os.walk(dirToView):
-        for f in filenames:
-            if "gazePredictions" in f:
-                with open(dirToView+f, 'rb') as csvfile:
-                    spamreader = csv.reader(csvfile, delimiter=',')
-                    print f
-                    for row in spamreader:
-                        # print row
-                        feature = []
-                        tobiiLeftEyeGazeX = float( row[2] )
-                        tobiiLeftEyeGazeY = float( row[3] )
-                        tobiiRightEyeGazeX = float( row[4] )
-                        tobiiRightEyeGazeY = float( row[5] )
-                        tobiiEyeGazeX = (tobiiLeftEyeGazeX + tobiiRightEyeGazeX) / 2
-                        tobiiEyeGazeY = (tobiiLeftEyeGazeY + tobiiRightEyeGazeY) / 2
-                        clmTracker = row[8:len(row)-1]
-                        clmTracker = [float(i) for i in clmTracker]
-                        clmTrackerInt = [int(i) for i in clmTracker]
-                        # Jaw
-                        jaw = clmTrackerInt[0:30]
-                        # for i in range(0,28,2):
-                        #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
-                        
-                        # Right eyebrow
-                        reyebrow = clmTrackerInt[30:38]
-                        # for i in range(30,36,2):
-                        #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
+def get_data(train_or_test):
+    if train_or_test == 'train'
+        dirToView = "./csvtrain/"
+        i = 0
+        data = []
+        for dirpath,_,filenames in os.walk(dirToView):
+            for f in filenames:
+                if "gazePredictions" in f:
+                    with open(dirToView+f, 'rb') as csvfile:
+                        spamreader = csv.reader(csvfile, delimiter=',')
+                        for row in spamreader:
+                            feature = []
+                            tobiiLeftEyeGazeX = float( row[2] )
+                            tobiiLeftEyeGazeY = float( row[3] )
+                            tobiiRightEyeGazeX = float( row[4] )
+                            tobiiRightEyeGazeY = float( row[5] )
+                            tobiiEyeGazeX = (tobiiLeftEyeGazeX + tobiiRightEyeGazeX) / 2
+                            tobiiEyeGazeY = (tobiiLeftEyeGazeY + tobiiRightEyeGazeY) / 2
+                            clmTracker = row[8:len(row)-1]
+                            clmTracker = [float(i) for i in clmTracker]
+                            clmTrackerInt = [int(i) for i in clmTracker]
 
-                        # Left eyebrow
-                        leyebrow = clmTrackerInt[38:46]
-                        # for i in range(38,44,2):
-                        #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
+                            # Jaw
+                            jaw = clmTrackerInt[0:30]
+                            # for i in range(0,28,2):
+                            #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
+                            
+                            # Right eyebrow
+                            reyebrow = clmTrackerInt[30:38]
+                            # for i in range(30,36,2):
+                            #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
 
-                        # Upper left eye
-                        uleye = clmTrackerInt[46:52]
-                        # for i in range(46,50,2):
-                        #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
+                            # Left eyebrow
+                            leyebrow = clmTrackerInt[38:46]
+                            # for i in range(38,44,2):
+                            #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
 
-                        # Middle of left eye
-                        mleye = clmTrackerInt[52:56]
-                        # for i in range(54,56,2):
-                        #     cv2.circle(img, (clmTrackerInt[i],clmTrackerInt[i+1]), 4, (255,0,0), -4 )        
+                            # Upper left eye
+                            uleye = clmTrackerInt[46:52]
+                            # for i in range(46,50,2):
+                            #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
 
-                        # Upper right eye
-                        ureye = clmTrackerInt[56:62]
-                        # for i in range(56,60,2):
-                        #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
+                            # Middle of left eye
+                            mleye = clmTrackerInt[52:56]
+                            # for i in range(54,56,2):
+                            #     cv2.circle(img, (clmTrackerInt[i],clmTrackerInt[i+1]), 4, (255,0,0), -4 )        
 
-                        # Middle of right eye
-                        mreye = clmTrackerInt[62:66]
-                        # for i in range(64,66,2):
-                        #     cv2.circle(img, (clmTrackerInt[i],clmTrackerInt[i+1]), 4, (255,0,0), -4 ) 
-                        
-                        # Nose
-                        nose = clmTrackerInt[66:88]
-                        # for i in range(68,80,2):
-                        #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
+                            # Upper right eye
+                            ureye = clmTrackerInt[56:62]
+                            # for i in range(56,60,2):
+                            #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
 
-                        # Upper lip
-                        ulip = clmTrackerInt[88:102]
-                        # for i in range(88,100,2):
-                        #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
+                            # Middle of right eye
+                            mreye = clmTrackerInt[62:66]
+                            # for i in range(64,66,2):
+                            #     cv2.circle(img, (clmTrackerInt[i],clmTrackerInt[i+1]), 4, (255,0,0), -4 ) 
+                            
+                            # Nose
+                            nose = clmTrackerInt[66:88]
+                            # for i in range(68,80,2):
+                            #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
 
-                        # Lower lip
-                        llip = clmTrackerInt[102:112]
-                        # for i in range(102,110,2):
-                        #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
+                            # Upper lip
+                            ulip = clmTrackerInt[88:102]
+                            # for i in range(88,100,2):
+                            #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
 
-                        feature.append(jaw)
-                        feature.append(reyebrow)
-                        feature.append(leyebrow)
-                        feature.append(uleye)
-                        feature.append(mleye)
-                        feature.append(ureye)
-                        feature.append(mreye)
-                        feature.append(nose)
-                        feature.append(ulip)
-                        feature.append(llip)
-                        label = [tobiiEyeGazeX, tobiiEyeGazeY]
-                        data.append([feature, label])
+                            # Lower lip
+                            llip = clmTrackerInt[102:112]
+                            # for i in range(102,110,2):
+                            #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
+
+                            feature.append(jaw)
+                            feature.append(reyebrow)
+                            feature.append(leyebrow)
+                            feature.append(uleye)
+                            feature.append(mleye)
+                            feature.append(ureye)
+                            feature.append(mreye)
+                            feature.append(nose)
+                            feature.append(ulip)
+                            feature.append(llip)
+
+                            label = [tobiiEyeGazeX, tobiiEyeGazeY]
+                            data.append([feature, label])
+    else:
+        dirToView = "./csvtest/"
+        i = 0
+        data = []
+        for dirpath,_,filenames in os.walk(dirToView):
+            for f in filenames:
+                if "gazePredictions" in f:
+                    with open(dirToView+f, 'rb') as csvfile:
+                        spamreader = csv.reader(csvfile, delimiter=',')
+                        for row in spamreader:
+                            feature = []
+                            tobiiLeftEyeGazeX = float( row[2] )
+                            tobiiLeftEyeGazeY = float( row[3] )
+                            tobiiRightEyeGazeX = float( row[4] )
+                            tobiiRightEyeGazeY = float( row[5] )
+                            tobiiEyeGazeX = (tobiiLeftEyeGazeX + tobiiRightEyeGazeX) / 2
+                            tobiiEyeGazeY = (tobiiLeftEyeGazeY + tobiiRightEyeGazeY) / 2
+                            clmTracker = row[8:len(row)-1]
+                            clmTracker = [float(i) for i in clmTracker]
+                            clmTrackerInt = [int(i) for i in clmTracker]
+
+                            # Jaw
+                            jaw = clmTrackerInt[0:30]
+                            # for i in range(0,28,2):
+                            #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
+                            
+                            # Right eyebrow
+                            reyebrow = clmTrackerInt[30:38]
+                            # for i in range(30,36,2):
+                            #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
+
+                            # Left eyebrow
+                            leyebrow = clmTrackerInt[38:46]
+                            # for i in range(38,44,2):
+                            #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
+
+                            # Upper left eye
+                            uleye = clmTrackerInt[46:52]
+                            # for i in range(46,50,2):
+                            #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
+
+                            # Middle of left eye
+                            mleye = clmTrackerInt[52:56]
+                            # for i in range(54,56,2):
+                            #     cv2.circle(img, (clmTrackerInt[i],clmTrackerInt[i+1]), 4, (255,0,0), -4 )        
+
+                            # Upper right eye
+                            ureye = clmTrackerInt[56:62]
+                            # for i in range(56,60,2):
+                            #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
+
+                            # Middle of right eye
+                            mreye = clmTrackerInt[62:66]
+                            # for i in range(64,66,2):
+                            #     cv2.circle(img, (clmTrackerInt[i],clmTrackerInt[i+1]), 4, (255,0,0), -4 ) 
+                            
+                            # Nose
+                            nose = clmTrackerInt[66:88]
+                            # for i in range(68,80,2):
+                            #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
+
+                            # Upper lip
+                            ulip = clmTrackerInt[88:102]
+                            # for i in range(88,100,2):
+                            #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
+
+                            # Lower lip
+                            llip = clmTrackerInt[102:112]
+                            # for i in range(102,110,2):
+                            #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
+
+                            feature.append(jaw)
+                            feature.append(reyebrow)
+                            feature.append(leyebrow)
+                            feature.append(uleye)
+                            feature.append(mleye)
+                            feature.append(ureye)
+                            feature.append(mreye)
+                            feature.append(nose)
+                            feature.append(ulip)
+                            feature.append(llip)
+
+                            label = [tobiiEyeGazeX, tobiiEyeGazeY]
+                            data.append([feature, label])
     return data
 
 
 if __name__ == '__main__':
-    data = get_data()
+    data_train = get_data('train')
+    data_test = get_data('test')
+
+    logger.set_logger_dir('/tmp/hhe2log/train_log')
+
+    # TensorPack: Training configuration
+    config = TrainConfig(
+        model=YourModel(),
+        dataflow=dataset_train,
+        callbacks=[
+            # Callbacks are performed at the end of every epoch.
+            #
+            # For instance, we can save the current model
+            ModelSaver(),
+            # Evaluate the current model and print out the loss
+            InferenceRunner(dataset_test,
+                            [ScalarStats('cost'), ClassificationError()])
+            #
+            # You can put other callbacks here to change hyperparameters,
+            # etc...
+            #
+        ],
+        max_epoch=hp.num_epochs,
+        nr_tower=max(get_nr_gpu(), 1),
+        session_config=tf.ConfigProto(gpu_options=tf.GPUOptions(allow_growth=True), allow_soft_placement=True),
+        session_init=None if args.task == '1' else get_model_loader(args.load)
+    )
+
 
 
 # from vgg_model import VGGModel
