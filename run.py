@@ -212,11 +212,14 @@ if __name__ == '__main__':
             # etc...
             #
         ],
-        max_epoch=hp.num_epochs,
+        max_epoch=30,
         nr_tower=max(get_nr_gpu(), 1),
         session_config=tf.ConfigProto(gpu_options=tf.GPUOptions(allow_growth=True), allow_soft_placement=True),
-        session_init=None if args.task == '1' else get_model_loader(args.load)
+        session_init=None 
     )
+
+    # TensorPack: Training with simple one at a time feed into batches
+    SimpleTrainer(config).train()
 
 
 
