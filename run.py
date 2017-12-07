@@ -19,7 +19,7 @@ from tensorpack.dataflow.base import RNGDataFlow
 
 def get_data(train_or_test):
     #change features to dictionary?
-    features = []
+    features = {'jaw':[], 'reyebrow':[],'leyebrow':[],'uleye':[],'mleye':[],'ureye':[],'mreye':[],'nose':[],'ulip':[],'llip':[]}
     labels = []
     if train_or_test == 'train':
         dirToView = "./csvtrain/"
@@ -32,7 +32,6 @@ def get_data(train_or_test):
                 with open(dirToView+f, 'r') as csvfile:
                     spamreader = csv.reader(csvfile, delimiter=',')
                     for row in spamreader:
-                        feature = []
                         tobiiLeftEyeGazeX = float( row[2] )
                         tobiiLeftEyeGazeY = float( row[3] )
                         tobiiRightEyeGazeX = float( row[4] )
@@ -93,30 +92,28 @@ def get_data(train_or_test):
                         # for i in range(102,110,2):
                         #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
 
-                        feature.append(jaw)
-                        feature.append(reyebrow)
-                        feature.append(leyebrow)
-                        feature.append(uleye)
-                        feature.append(mleye)
-                        feature.append(ureye)
-                        feature.append(mreye)
-                        feature.append(nose)
-                        feature.append(ulip)
-                        feature.append(llip)
+                        features['jaw'].append(jaw)
+                        features['reyebrow'].append(reyebrow)
+                        features['leyebrow'].append(leyebrow)
+                        features['uleye'].append(uleye)
+                        features['mleye'].append(mleye)
+                        features['ureye'].append(ureye)
+                        features['mreye'].append(mreye)
+                        features['nose'].append(nose)
+                        features['ulip'].append(ulip)
+                        features['llip'].append(llip)
 
                         label = [tobiiEyeGazeX, tobiiEyeGazeY]
-                        features.append(feature)
                         labels.append(label)
+    for key in features:
+        features[key] = np.array(features[key])
     return (features,labels)
 
 
 if __name__ == '__main__':
     data_train = get_data('train')
-    print("Got train data")
 
-    
-
-
+    # TODO is this right?
     jaw = tf.contrib.layers.real_valued_column("jaw", dimension=30, default_value=None, dtype=tf.int32, normalizer=None)
     reyebrow = tf.contrib.layers.real_valued_column("reyebrow", dimension=8, default_value=None, dtype=tf.int32, normalizer=None)
     leyebrow = tf.contrib.layers.real_valued_column("leyebrow", dimension=8, default_value=None, dtype=tf.int32, normalizer=None)
@@ -128,44 +125,60 @@ if __name__ == '__main__':
     ulip = tf.contrib.layers.real_valued_column("ulip", dimension=14, default_value=None, dtype=tf.int32, normalizer=None)
     llip = tf.contrib.layers.real_valued_column("llip", dimension=10, default_value=None, dtype=tf.int32, normalizer=None)
 
-    # estimator = DNNRegressor(
-    #     feature_columns=[categorical_feature_a_emb, categorical_feature_b_emb],
-    #     hidden_units=[1024, 512, 256])
+    logger.auto_set_dir()
 
-    # # Or estimator using the ProximalAdagradOptimizer optimizer with
-    # # regularization.
+    # TODO is this right?
     estimator = tf.estimator.DNNRegressor(
         feature_columns=[jaw, reyebrow, leyebrow, uleye, ureye, mreye, nose, ulip, llip],
-        #WHAT ARE THESE
+        #WHAT ARE THESE??
         hidden_units=[1024, 512, 256],
+        #What is this??
         optimizer=tf.train.ProximalAdagradOptimizer(
           learning_rate=0.1,
           l1_regularization_strength=0.001
-        ))
+        ),
+        label_dimension=2,
+        model_dir = "/tmp/model"
+        )
 
-    train_input_fn = tf.estimator.inputs.numpy_input_fn(
-        x={"x": np.array(data_train[0])},
+
+    # TODO is this right??
+    input_fn_train = tf.estimator.inputs.numpy_input_fn(
+        x=data_train[0],
         y=np.array(data_train[1]),
         num_epochs=None,
         shuffle=True)
-    print("Gonna train")
-    estimator.train(input_fn=train_input_fn, steps=100)
-    print("Done training")
 
-    print("getting test data")
+    # TODO what is the difference between steps and epochs
+    estimator.train(input_fn=input_fn_train, steps=1000)
+
     data_test = get_data('test')
-    print("finished getting test data")
-    print("Gonna test")
 
-    test_input_fn = tf.estimator.inputs.numpy_input_fn(
-        x={"x": np.array(data_test[0])},
+    input_fn_eval = tf.estimator.inputs.numpy_input_fn(
+        x=data_test[0],
         y=np.array(data_test[1]),
-        num_epochs=None,
-        shuffle=True)
+        num_epochs=1,
+        shuffle=False)
 
-    metrics = estimator.evaluate(input_fn=test_input_fn, steps=10)
+    metrics = estimator.evaluate(input_fn=input_fn_eval)
 
-    print(metrics)
+    # TODO what does the loss value here represent?
+    print("Loss: %s" % metrics["loss"])
+
+
+
+    # is there any way to understand how well our evaluations are doing step-wise?
+    # how to generate log report as in proj 4?
+
+
+
+
+
+
+
+
+
+    # print(metrics)
     # def input_fn_predict: 
     # # returns x, None
     #   pass
