@@ -126,6 +126,7 @@ if __name__ == '__main__':
     llip = tf.contrib.layers.real_valued_column("llip", dimension=10, default_value=None, dtype=tf.int32, normalizer=None)
 
     logger.auto_set_dir()
+    tf.logging.set_verbosity(tf.logging.INFO)
 
     # TODO is this right?
     estimator = tf.estimator.DNNRegressor(
@@ -138,7 +139,7 @@ if __name__ == '__main__':
           l1_regularization_strength=0.001
         ),
         label_dimension=2,
-        model_dir = "/tmp/model"
+        model_dir = "model"
         )
 
 
@@ -167,8 +168,13 @@ if __name__ == '__main__':
 
 
 
-    # is there any way to understand how well our evaluations are doing step-wise?
-    # how to generate log report as in proj 4?
+    #is there any way to understand how well our evaluations are doing step-wise?
+    #how to generate log report as in proj 4?
+    #what is global step?
+
+    #parameters to check: step, num_epoch, evaluate and train params
+
+    #seems like model is being reused at each successive training attempt? 
 
 
 
