@@ -1,0 +1,106 @@
+{
+  "dnn/hiddenlayer_0/bias": {
+    "filename": "dnn_hiddenlayer_0_bias", 
+    "shape": [
+      1024
+    ]
+  }, 
+  "dnn/hiddenlayer_0/bias/t_0/ProximalAdagrad": {
+    "filename": "dnn_hiddenlayer_0_bias_t_0_ProximalAdagrad", 
+    "shape": [
+      1024
+    ]
+  }, 
+  "dnn/hiddenlayer_0/kernel": {
+    "filename": "dnn_hiddenlayer_0_kernel", 
+    "shape": [
+      108, 
+      1024
+    ]
+  }, 
+  "dnn/hiddenlayer_0/kernel/t_0/ProximalAdagrad": {
+    "filename": "dnn_hiddenlayer_0_kernel_t_0_ProximalAdagrad", 
+    "shape": [
+      108, 
+      1024
+    ]
+  }, 
+  "dnn/hiddenlayer_1/bias": {
+    "filename": "dnn_hiddenlayer_1_bias", 
+    "shape": [
+      512
+    ]
+  }, 
+  "dnn/hiddenlayer_1/bias/t_0/ProximalAdagrad": {
+    "filename": "dnn_hiddenlayer_1_bias_t_0_ProximalAdagrad", 
+    "shape": [
+      512
+    ]
+  }, 
+  "dnn/hiddenlayer_1/kernel": {
+    "filename": "dnn_hiddenlayer_1_kernel", 
+    "shape": [
+      1024, 
+      512
+    ]
+  }, 
+  "dnn/hiddenlayer_1/kernel/t_0/ProximalAdagrad": {
+    "filename": "dnn_hiddenlayer_1_kernel_t_0_ProximalAdagrad", 
+    "shape": [
+      1024, 
+      512
+    ]
+  }, 
+  "dnn/hiddenlayer_2/bias": {
+    "filename": "dnn_hiddenlayer_2_bias", 
+    "shape": [
+      256
+    ]
+  }, 
+  "dnn/hiddenlayer_2/bias/t_0/ProximalAdagrad": {
+    "filename": "dnn_hiddenlayer_2_bias_t_0_ProximalAdagrad", 
+    "shape": [
+      256
+    ]
+  }, 
+  "dnn/hiddenlayer_2/kernel": {
+    "filename": "dnn_hiddenlayer_2_kernel", 
+    "shape": [
+      512, 
+      256
+    ]
+  }, 
+  "dnn/hiddenlayer_2/kernel/t_0/ProximalAdagrad": {
+    "filename": "dnn_hiddenlayer_2_kernel_t_0_ProximalAdagrad", 
+    "shape": [
+      512, 
+      256
+    ]
+  }, 
+  "dnn/logits/bias": {
+    "filename": "dnn_logits_bias", 
+    "shape": [
+      2
+    ]
+  }, 
+  "dnn/logits/bias/t_0/ProximalAdagrad": {
+    "filename": "dnn_logits_bias_t_0_ProximalAdagrad", 
+    "shape": [
+      2
+    ]
+  }, 
+  "dnn/logits/kernel": {
+    "filename": "dnn_logits_kernel", 
+    "shape": [
+      256, 
+      2
+    ]
+  }, 
+  "dnn/logits/kernel/t_0/ProximalAdagrad": {
+    "filename": "dnn_logits_kernel_t_0_ProximalAdagrad", 
+    "shape": [
+      256, 
+      2
+    ]
+  }
+}
