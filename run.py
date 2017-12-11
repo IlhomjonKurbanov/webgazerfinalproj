@@ -147,7 +147,7 @@ if __name__ == '__main__':
     input_fn_train = tf.estimator.inputs.numpy_input_fn(
         x=data_train[0],
         y=np.array(data_train[1]),
-        num_epochs=None,
+        num_epochs=100,
         shuffle=True)
 
     # TODO what is the difference between steps and epochs
@@ -165,8 +165,6 @@ if __name__ == '__main__':
 
     # TODO what does the loss value here represent?
     print("Loss: %s" % metrics["loss"])
-
-
 
     #is there any way to understand how well our evaluations are doing step-wise?
     #how to generate log report as in proj 4?
