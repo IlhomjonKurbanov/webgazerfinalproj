@@ -1227,7 +1227,7 @@ node {
   }
 }
 node {
-  name: "random_shuffle_queue_DequeueMany/n"
+  name: "random_shuffle_queue_DequeueUpTo/n"
   op: "Const"
   device: "/device:CPU:0"
   attr {
@@ -1258,10 +1258,10 @@ node {
   }
 }
 node {
-  name: "random_shuffle_queue_DequeueMany"
-  op: "QueueDequeueManyV2"
+  name: "random_shuffle_queue_DequeueUpTo"
+  op: "QueueDequeueUpToV2"
   input: "enqueue_input/random_shuffle_queue"
-  input: "random_shuffle_queue_DequeueMany/n"
+  input: "random_shuffle_queue_DequeueUpTo/n"
   device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
@@ -1269,12 +1269,12 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
         }
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 30
@@ -1282,7 +1282,7 @@ node {
         }
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 8
@@ -1290,7 +1290,7 @@ node {
         }
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 10
@@ -1298,7 +1298,7 @@ node {
         }
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 4
@@ -1306,7 +1306,7 @@ node {
         }
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 4
@@ -1314,7 +1314,7 @@ node {
         }
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 22
@@ -1322,7 +1322,7 @@ node {
         }
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 8
@@ -1330,7 +1330,7 @@ node {
         }
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 6
@@ -1338,7 +1338,7 @@ node {
         }
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 14
@@ -1346,7 +1346,7 @@ node {
         }
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 6
@@ -1354,7 +1354,7 @@ node {
         }
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -1392,7 +1392,7 @@ node {
 node {
   name: "dnn/input_from_feature_columns/input_layer/jaw/ToFloat"
   op: "Cast"
-  input: "random_shuffle_queue_DequeueMany:1"
+  input: "random_shuffle_queue_DequeueUpTo:1"
   input: "^add"
   attr {
     key: "DstT"
@@ -1412,7 +1412,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 30
@@ -1424,8 +1424,14 @@ node {
 }
 node {
   name: "dnn/input_from_feature_columns/input_layer/jaw/Shape"
-  op: "Const"
-  input: "^add"
+  op: "Shape"
+  input: "dnn/input_from_feature_columns/input_layer/jaw/ToFloat"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -1439,23 +1445,9 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\036\000\000\000"
-      }
     }
   }
 }
@@ -1719,7 +1711,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 30
@@ -1732,7 +1724,7 @@ node {
 node {
   name: "dnn/input_from_feature_columns/input_layer/leyebrow/ToFloat"
   op: "Cast"
-  input: "random_shuffle_queue_DequeueMany:2"
+  input: "random_shuffle_queue_DequeueUpTo:2"
   input: "^add"
   attr {
     key: "DstT"
@@ -1752,7 +1744,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 8
@@ -1764,8 +1756,14 @@ node {
 }
 node {
   name: "dnn/input_from_feature_columns/input_layer/leyebrow/Shape"
-  op: "Const"
-  input: "^add"
+  op: "Shape"
+  input: "dnn/input_from_feature_columns/input_layer/leyebrow/ToFloat"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -1779,23 +1777,9 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\010\000\000\000"
-      }
     }
   }
 }
@@ -2059,7 +2043,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 8
@@ -2072,7 +2056,7 @@ node {
 node {
   name: "dnn/input_from_feature_columns/input_layer/llip/ToFloat"
   op: "Cast"
-  input: "random_shuffle_queue_DequeueMany:3"
+  input: "random_shuffle_queue_DequeueUpTo:3"
   input: "^add"
   attr {
     key: "DstT"
@@ -2092,7 +2076,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 10
@@ -2104,8 +2088,14 @@ node {
 }
 node {
   name: "dnn/input_from_feature_columns/input_layer/llip/Shape"
-  op: "Const"
-  input: "^add"
+  op: "Shape"
+  input: "dnn/input_from_feature_columns/input_layer/llip/ToFloat"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -2119,23 +2109,9 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\n\000\000\000"
-      }
     }
   }
 }
@@ -2399,7 +2375,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 10
@@ -2412,7 +2388,7 @@ node {
 node {
   name: "dnn/input_from_feature_columns/input_layer/mreye/ToFloat"
   op: "Cast"
-  input: "random_shuffle_queue_DequeueMany:5"
+  input: "random_shuffle_queue_DequeueUpTo:5"
   input: "^add"
   attr {
     key: "DstT"
@@ -2432,7 +2408,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 4
@@ -2444,8 +2420,14 @@ node {
 }
 node {
   name: "dnn/input_from_feature_columns/input_layer/mreye/Shape"
-  op: "Const"
-  input: "^add"
+  op: "Shape"
+  input: "dnn/input_from_feature_columns/input_layer/mreye/ToFloat"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -2459,23 +2441,9 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\004\000\000\000"
-      }
     }
   }
 }
@@ -2739,7 +2707,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 4
@@ -2752,7 +2720,7 @@ node {
 node {
   name: "dnn/input_from_feature_columns/input_layer/nose/ToFloat"
   op: "Cast"
-  input: "random_shuffle_queue_DequeueMany:6"
+  input: "random_shuffle_queue_DequeueUpTo:6"
   input: "^add"
   attr {
     key: "DstT"
@@ -2772,7 +2740,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 22
@@ -2784,8 +2752,14 @@ node {
 }
 node {
   name: "dnn/input_from_feature_columns/input_layer/nose/Shape"
-  op: "Const"
-  input: "^add"
+  op: "Shape"
+  input: "dnn/input_from_feature_columns/input_layer/nose/ToFloat"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -2799,23 +2773,9 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\026\000\000\000"
-      }
     }
   }
 }
@@ -3079,7 +3039,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 22
@@ -3092,7 +3052,7 @@ node {
 node {
   name: "dnn/input_from_feature_columns/input_layer/reyebrow/ToFloat"
   op: "Cast"
-  input: "random_shuffle_queue_DequeueMany:7"
+  input: "random_shuffle_queue_DequeueUpTo:7"
   input: "^add"
   attr {
     key: "DstT"
@@ -3112,7 +3072,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 8
@@ -3124,8 +3084,14 @@ node {
 }
 node {
   name: "dnn/input_from_feature_columns/input_layer/reyebrow/Shape"
-  op: "Const"
-  input: "^add"
+  op: "Shape"
+  input: "dnn/input_from_feature_columns/input_layer/reyebrow/ToFloat"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -3139,23 +3105,9 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\010\000\000\000"
-      }
     }
   }
 }
@@ -3419,7 +3371,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 8
@@ -3432,7 +3384,7 @@ node {
 node {
   name: "dnn/input_from_feature_columns/input_layer/uleye/ToFloat"
   op: "Cast"
-  input: "random_shuffle_queue_DequeueMany:8"
+  input: "random_shuffle_queue_DequeueUpTo:8"
   input: "^add"
   attr {
     key: "DstT"
@@ -3452,7 +3404,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 6
@@ -3464,8 +3416,14 @@ node {
 }
 node {
   name: "dnn/input_from_feature_columns/input_layer/uleye/Shape"
-  op: "Const"
-  input: "^add"
+  op: "Shape"
+  input: "dnn/input_from_feature_columns/input_layer/uleye/ToFloat"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -3479,23 +3437,9 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\006\000\000\000"
-      }
     }
   }
 }
@@ -3759,7 +3703,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 6
@@ -3772,7 +3716,7 @@ node {
 node {
   name: "dnn/input_from_feature_columns/input_layer/ulip/ToFloat"
   op: "Cast"
-  input: "random_shuffle_queue_DequeueMany:9"
+  input: "random_shuffle_queue_DequeueUpTo:9"
   input: "^add"
   attr {
     key: "DstT"
@@ -3792,7 +3736,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 14
@@ -3804,8 +3748,14 @@ node {
 }
 node {
   name: "dnn/input_from_feature_columns/input_layer/ulip/Shape"
-  op: "Const"
-  input: "^add"
+  op: "Shape"
+  input: "dnn/input_from_feature_columns/input_layer/ulip/ToFloat"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -3819,23 +3769,9 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\016\000\000\000"
-      }
     }
   }
 }
@@ -4099,7 +4035,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 14
@@ -4112,7 +4048,7 @@ node {
 node {
   name: "dnn/input_from_feature_columns/input_layer/ureye/ToFloat"
   op: "Cast"
-  input: "random_shuffle_queue_DequeueMany:10"
+  input: "random_shuffle_queue_DequeueUpTo:10"
   input: "^add"
   attr {
     key: "DstT"
@@ -4132,7 +4068,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 6
@@ -4144,8 +4080,14 @@ node {
 }
 node {
   name: "dnn/input_from_feature_columns/input_layer/ureye/Shape"
-  op: "Const"
-  input: "^add"
+  op: "Shape"
+  input: "dnn/input_from_feature_columns/input_layer/ureye/ToFloat"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -4159,23 +4101,9 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\006\000\000\000"
-      }
     }
   }
 }
@@ -4439,7 +4367,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 6
@@ -4517,7 +4445,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 108
@@ -5151,7 +5079,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 1024
@@ -5213,7 +5141,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 1024
@@ -5245,7 +5173,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 1024
@@ -5303,7 +5231,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 1024
@@ -5335,7 +5263,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 1024
@@ -6143,7 +6071,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 512
@@ -6205,7 +6133,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 512
@@ -6237,7 +6165,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 512
@@ -6295,7 +6223,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 512
@@ -6327,7 +6255,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 512
@@ -7135,7 +7063,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 256
@@ -7197,7 +7125,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 256
@@ -7229,7 +7157,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 256
@@ -7287,7 +7215,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 256
@@ -7319,7 +7247,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 256
@@ -8127,7 +8055,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -8189,7 +8117,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -8253,7 +8181,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -8285,7 +8213,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -8471,8 +8399,14 @@ node {
 }
 node {
   name: "dnn/head/logits/Shape"
-  op: "Const"
-  input: "^add"
+  op: "Shape"
+  input: "dnn/logits/BiasAdd"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -8486,23 +8420,9 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\002\000\000\000"
-      }
     }
   }
 }
@@ -8873,7 +8793,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -8886,7 +8806,7 @@ node {
 node {
   name: "dnn/head/ToFloat"
   op: "Cast"
-  input: "random_shuffle_queue_DequeueMany:11"
+  input: "random_shuffle_queue_DequeueUpTo:11"
   input: "^add"
   attr {
     key: "DstT"
@@ -8906,7 +8826,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -8918,8 +8838,14 @@ node {
 }
 node {
   name: "dnn/head/labels/Shape"
-  op: "Const"
-  input: "^add"
+  op: "Shape"
+  input: "dnn/head/ToFloat"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -8933,23 +8859,9 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\002\000\000\000"
-      }
     }
   }
 }
@@ -8986,8 +8898,14 @@ node {
 }
 node {
   name: "dnn/head/labels/assert_rank/Shape"
-  op: "Const"
-  input: "^add"
+  op: "Shape"
+  input: "dnn/head/ToFloat"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -9001,23 +8919,9 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\002\000\000\000"
-      }
     }
   }
 }
@@ -9623,7 +9527,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -9650,7 +9554,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -9758,8 +9662,14 @@ node {
 }
 node {
   name: "dnn/head/mean_squared_error/assert_broadcastable/values/shape"
-  op: "Const"
-  input: "^add"
+  op: "Shape"
+  input: "dnn/head/mean_squared_error/SquaredDifference"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -9773,23 +9683,9 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\002\000\000\000"
-      }
     }
   }
 }
@@ -9878,7 +9774,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -9986,8 +9882,14 @@ node {
 }
 node {
   name: "dnn/head/weighted_loss/assert_broadcastable/values/shape"
-  op: "Const"
-  input: "^add"
+  op: "Shape"
+  input: "dnn/head/mean_squared_error/Mul"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -10001,23 +9903,9 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\002\000\000\000"
-      }
     }
   }
 }
@@ -10106,7 +9994,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -10337,8 +10225,14 @@ node {
 }
 node {
   name: "weighted_loss/assert_broadcastable/values/shape"
-  op: "Const"
-  input: "^add"
+  op: "Shape"
+  input: "dnn/head/mean_squared_error/Mul"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -10352,23 +10246,9 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\002\000\000\000"
-      }
     }
   }
 }
@@ -10457,7 +10337,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -10540,9 +10420,15 @@ node {
 }
 node {
   name: "weighted_loss/ones_like/Shape"
-  op: "Const"
-  input: "^add"
+  op: "Shape"
+  input: "dnn/head/mean_squared_error/Mul"
   input: "^weighted_loss/assert_broadcastable/static_scalar_check_success"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -10556,23 +10442,9 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\002\000\000\000"
-      }
     }
   }
 }
@@ -10625,7 +10497,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -10652,7 +10524,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -11301,9 +11173,15 @@ node {
   }
 }
 node {
-  name: "dnn/gradients/dnn/head/weighted_loss/Sum_grad/Tile/multiples"
-  op: "Const"
-  input: "^add"
+  name: "dnn/gradients/dnn/head/weighted_loss/Sum_grad/Shape"
+  op: "Shape"
+  input: "dnn/head/weighted_loss/Mul"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -11317,23 +11195,9 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\002\000\000\000"
-      }
     }
   }
 }
@@ -11341,7 +11205,7 @@ node {
   name: "dnn/gradients/dnn/head/weighted_loss/Sum_grad/Tile"
   op: "Tile"
   input: "dnn/gradients/dnn/head/weighted_loss/Sum_grad/Reshape"
-  input: "dnn/gradients/dnn/head/weighted_loss/Sum_grad/Tile/multiples"
+  input: "dnn/gradients/dnn/head/weighted_loss/Sum_grad/Shape"
   attr {
     key: "T"
     value {
@@ -11360,7 +11224,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -11372,8 +11236,14 @@ node {
 }
 node {
   name: "dnn/gradients/dnn/head/weighted_loss/Mul_grad/Shape"
-  op: "Const"
-  input: "^add"
+  op: "Shape"
+  input: "dnn/head/mean_squared_error/Mul"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -11387,23 +11257,9 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\002\000\000\000"
-      }
     }
   }
 }
@@ -11487,7 +11343,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -11554,7 +11410,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -11581,7 +11437,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -11684,7 +11540,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -11725,8 +11581,14 @@ node {
 }
 node {
   name: "dnn/gradients/dnn/head/mean_squared_error/Mul_grad/Shape"
-  op: "Const"
-  input: "^add"
+  op: "Shape"
+  input: "dnn/head/mean_squared_error/SquaredDifference"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -11740,23 +11602,9 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\002\000\000\000"
-      }
     }
   }
 }
@@ -11840,7 +11688,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -11907,7 +11755,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -11934,7 +11782,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -12037,7 +11885,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -12078,8 +11926,14 @@ node {
 }
 node {
   name: "dnn/gradients/dnn/head/mean_squared_error/SquaredDifference_grad/Shape"
-  op: "Const"
-  input: "^add"
+  op: "Shape"
+  input: "dnn/head/logits"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -12093,30 +11947,22 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\002\000\000\000"
-      }
     }
   }
 }
 node {
   name: "dnn/gradients/dnn/head/mean_squared_error/SquaredDifference_grad/Shape_1"
-  op: "Const"
-  input: "^add"
+  op: "Shape"
+  input: "dnn/head/labels"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
   attr {
     key: "_output_shapes"
     value {
@@ -12130,23 +11976,9 @@ node {
     }
   }
   attr {
-    key: "dtype"
+    key: "out_type"
     value {
       type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 2
-          }
-        }
-        tensor_content: "\200\000\000\000\002\000\000\000"
-      }
     }
   }
 }
@@ -12228,7 +12060,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -12256,7 +12088,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -12283,7 +12115,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -12350,7 +12182,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -12417,7 +12249,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -12443,7 +12275,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -12485,7 +12317,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -12520,7 +12352,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -12591,7 +12423,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 2
@@ -12650,7 +12482,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 256
@@ -12743,7 +12575,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 256
@@ -12805,7 +12637,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 256
@@ -12876,7 +12708,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 256
@@ -12935,7 +12767,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 512
@@ -13028,7 +12860,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 512
@@ -13090,7 +12922,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 512
@@ -13161,7 +12993,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 512
@@ -13220,7 +13052,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 1024
@@ -13313,7 +13145,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 1024
@@ -13375,7 +13207,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 1024
@@ -13446,7 +13278,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 1024
@@ -13505,7 +13337,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 108
@@ -13598,7 +13430,7 @@ node {
       list {
         shape {
           dim {
-            size: 128
+            size: -1
           }
           dim {
             size: 108
@@ -18613,7 +18445,7 @@ node {
         dtype: DT_STRING
         tensor_shape {
         }
-        string_val: "_temp_69b3bfb07168406fbbd9c8b6c5d14e99/part"
+        string_val: "_temp_e6197613eab44126b57e02704afbc0d8/part"
       }
     }
   }

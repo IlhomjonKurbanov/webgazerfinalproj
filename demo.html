@@ -10,12 +10,14 @@
             Click on a few locations within the screen<br>
             while looking purposefully at the cursor.<br>
             Both clicks and cursor movements<br>
-            make the predictions more accurate. 
+            make the predictions more accurate.
         </h1>
     </div>
 
 
-        <script src="build/webgazer.js"></script>
+        <!-- <script src="build/webgazer.js"></script> -->
+
+        <script type=text/javascript src="{{url_for('static', filmename='build/webgazer.js')}}"></script>
         <script>
 window.onload = function() {
     webgazer.setRegression('ridge') /* currently must set regression and tracker */
@@ -31,7 +33,7 @@ window.onload = function() {
     var height = 240;
     var topDist = '0px';
     var leftDist = '0px';
-    
+
     var setup = function() {
         var video = document.getElementById('webgazerVideoFeed');
         video.style.display = 'block';
@@ -81,7 +83,7 @@ window.onload = function() {
 
 window.onbeforeunload = function() {
     //webgazer.end(); //Uncomment if you want to save the data even if you reload the page.
-    window.localStorage.clear(); //Comment out if you want to save data across different sessions 
+    window.localStorage.clear(); //Comment out if you want to save data across different sessions
 }
         </script>
 

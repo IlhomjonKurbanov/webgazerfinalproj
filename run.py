@@ -26,6 +26,7 @@ def get_data(train_or_test):
     else:
         dirToView = "./csvtest/"
     i = 0
+    j = 0
     for dirpath,_,filenames in os.walk(dirToView):
         for f in filenames:
             if "gazePredictions" in f:
@@ -46,7 +47,7 @@ def get_data(train_or_test):
                         jaw = clmTrackerInt[0:30]
                         # for i in range(0,28,2):
                         #     cv2.line(img, (clmTrackerInt[i],clmTrackerInt[i+1]), (clmTrackerInt[i+2],clmTrackerInt[i+3]), (0,255,0), 4)
-                        
+
                         # Right eyebrow
                         reyebrow = clmTrackerInt[30:38]
                         # for i in range(30,36,2):
@@ -65,7 +66,7 @@ def get_data(train_or_test):
                         # Middle of left eye
                         mleye = clmTrackerInt[52:56]
                         # for i in range(54,56,2):
-                        #     cv2.circle(img, (clmTrackerInt[i],clmTrackerInt[i+1]), 4, (255,0,0), -4 )        
+                        #     cv2.circle(img, (clmTrackerInt[i],clmTrackerInt[i+1]), 4, (255,0,0), -4 )
 
                         # Upper right eye
                         ureye = clmTrackerInt[56:62]
@@ -75,8 +76,8 @@ def get_data(train_or_test):
                         # Middle of right eye
                         mreye = clmTrackerInt[62:66]
                         # for i in range(64,66,2):
-                        #     cv2.circle(img, (clmTrackerInt[i],clmTrackerInt[i+1]), 4, (255,0,0), -4 ) 
-                        
+                        #     cv2.circle(img, (clmTrackerInt[i],clmTrackerInt[i+1]), 4, (255,0,0), -4 )
+
                         # Nose
                         nose = clmTrackerInt[66:88]
                         # for i in range(68,80,2):
@@ -102,7 +103,9 @@ def get_data(train_or_test):
                         features['nose'].append(nose)
                         features['ulip'].append(ulip)
                         features['llip'].append(llip)
-
+                        if j == 0 :
+                            print features
+                            j += 1
                         label = [tobiiEyeGazeX, tobiiEyeGazeY]
                         labels.append(label)
     for key in features:
@@ -147,11 +150,11 @@ if __name__ == '__main__':
     input_fn_train = tf.estimator.inputs.numpy_input_fn(
         x=data_train[0],
         y=np.array(data_train[1]),
-        num_epochs=None,
+        num_epochs=100, # TODO: come back
         shuffle=True)
 
     # TODO what is the difference between steps and epochs
-    estimator.train(input_fn=input_fn_train, steps=1000)
+    estimator.train(input_fn=input_fn_train, steps=10000)
 
     data_test = get_data('test')
 
@@ -174,7 +177,7 @@ if __name__ == '__main__':
 
     #parameters to check: step, num_epoch, evaluate and train params
 
-    #seems like model is being reused at each successive training attempt? 
+    #seems like model is being reused at each successive training attempt?
 
 
 
@@ -185,7 +188,7 @@ if __name__ == '__main__':
 
 
     # print(metrics)
-    # def input_fn_predict: 
+    # def input_fn_predict:
     # # returns x, None
     #   pass
     # predictions = estimator.predict(input_fn=input_fn_predict)
@@ -212,7 +215,7 @@ if __name__ == '__main__':
     #     max_epoch=30,
     #     nr_tower=max(get_nr_gpu(), 1),
     #     session_config=tf.ConfigProto(gpu_options=tf.GPUOptions(allow_growth=True), allow_soft_placement=True),
-    #     session_init=None 
+    #     session_init=None
     # )
 
     # # TensorPack: Training with simple one at a time feed into batches
@@ -266,7 +269,7 @@ if __name__ == '__main__':
 
 #         self.imglist = [(fname, self.label_lookup[dirname]) for fname, dirname in self.imglist]
 
-        
+
 #         idxs = np.arange(len(self.imglist))
 
 #         # Load images into numpy array
@@ -285,7 +288,7 @@ if __name__ == '__main__':
 
 #         for k in idxs:
 #             self.imgs[:,:,:,k] -= mean_img[:,:,:,0]
-#             self.imgs[:,:,:,k] /= std[:,:,:,0] 
+#             self.imgs[:,:,:,k] /= std[:,:,:,0]
 #         ########################################################
 
 
@@ -320,17 +323,17 @@ if __name__ == '__main__':
 #             # TASK 1: Add data augmentations
 #             #
 #             # An example (that is duplicated work).
-#             # In the Scene15 class, we resize each image to 
+#             # In the Scene15 class, we resize each image to
 #             # 64x64 pixels as a preprocess. You then perform
 #             # standardization over the images in Task 1.
 #             #
-#             # However, if we wanted to skip standardization, 
+#             # However, if we wanted to skip standardization,
 #             # we could use an augmentation to resize the image
 #             # whenever it is needed:
 #             # imgaug.Resize( (img_size, img_size) )
 #             #
-#             # Please use the same syntax to write more useful 
-#             # augmentations. Read the documentation on the 
+#             # Please use the same syntax to write more useful
+#             # augmentations. Read the documentation on the
 #             # TensorPack image augmentation library and experiment!
 #             #################################################
 
@@ -338,7 +341,7 @@ if __name__ == '__main__':
 #     else:
 #         # Validation/test time augmentations
 #         augmentors = [
-#             imgaug.Resize((img_size, img_size)) 
+#             imgaug.Resize((img_size, img_size))
 #         ]
 #     # TensorPack: Add data augmentations
 #     ds = AugmentImageComponent(ds, augmentors)
