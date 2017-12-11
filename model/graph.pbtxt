@@ -18445,11 +18445,7 @@ node {
         dtype: DT_STRING
         tensor_shape {
         }
-<<<<<<< HEAD
-        string_val: "_temp_e6197613eab44126b57e02704afbc0d8/part"
-=======
-        string_val: "_temp_d66227cf3c91444c9de169237b8b87e0/part"
->>>>>>> a51dd4b17338574ca70557932863dbd614fece65
+        string_val: "_temp_ce2d8167a02b41eea6e9665a0fd9a1d8/part"
       }
     }
   }
