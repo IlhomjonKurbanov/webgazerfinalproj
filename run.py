@@ -154,7 +154,7 @@ if __name__ == '__main__':
         shuffle=True)
 
     # TODO what is the difference between steps and epochs
-    estimator.train(input_fn=input_fn_train, steps=10000)
+    estimator.train(input_fn=input_fn_train, steps=1000)
 
     data_test = get_data('test')
 
