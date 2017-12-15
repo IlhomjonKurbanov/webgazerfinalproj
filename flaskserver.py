@@ -25,10 +25,12 @@ def index():
 
     return render_template('demo.html')
 
+@app.route('/_get_prediction')
 def get_prediction():
     ### TODO: TAILOR DATA TO AJAX
 
     # TODO: Convert JSON AJAX input to python dict:
+
 
     # Convert input data to nparray dict format
     for key in inputdata:
