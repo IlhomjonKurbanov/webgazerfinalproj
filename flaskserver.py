@@ -41,7 +41,7 @@ def get_prediction():
 
     pred = estimator.predict(input_fn_eval)
 
-    # SEND AJAX REQUEST WITH ESTIMATOR DATA
+    # TODO: SEND AJAX REQUEST WITH ESTIMATOR DATA
 
     # for i, p in enumerate(pred):
     # 	print("Prediction %s" % (p))
