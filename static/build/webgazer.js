@@ -8234,6 +8234,8 @@ var mosseFilterResponses = function() {
             return false;
         }
 
+        return positions;
+
         //Fit the detected eye in a rectangle
         var leftOriginX = (positions[23][0]);
         var leftOriginY = (positions[24][1]);
@@ -8769,13 +8771,14 @@ var mosseFilterResponses = function() {
         return this.data;
     };
 
-// TODO: find out how to modify this so that it takes in all
     /**
      * Try to predict coordinates from pupil data
      * after apply linear regression on data set
      * @param {Object} eyesObj - The current user eyes object
      * @returns {Object}
      */
+
+
     webgazer.reg.LinearReg.prototype.predict = function(eyesObj) {
         if (!eyesObj) {
             return null;
@@ -10568,6 +10571,27 @@ var mosseFilterResponses = function() {
      * @param {Number} width - the width of canvas
      * @param {Number} height - the height of canvas
      */
+     //IMPORTANT FUNCTION: USING THIS TO GET FACE FEATURES
+    function getFaceFeatures(canvas, width, height) {
+        if (!canvas) {
+            return;
+        }
+        paintCurrentFrame(canvas, width, height);
+        try {
+            return curTracker.getEyePatches(canvas, width, height);
+        } catch(err) {
+            console.log(err);
+            return null;
+        }
+    }
+
+    /**
+     * Gets the pupil features by following the pipeline which threads an eyes object through each call:
+     * curTracker gets eye patches -> blink detector -> pupil detection
+     * @param {Canvas} canvas - a canvas which will have the video drawn onto it
+     * @param {Number} width - the width of canvas
+     * @param {Number} height - the height of canvas
+     */
     function getPupilFeatures(canvas, width, height) {
         if (!canvas) {
             return;
@@ -10613,7 +10637,10 @@ var mosseFilterResponses = function() {
 
     function getPrediction(regModelIndex) {
         var predictions = [];
-        var features = getPupilFeatures(videoElementCanvas, webgazer.params.imgWidth, webgazer.params.imgHeight);
+        var features = getFaceFeatures(videoElementCanvas, webgazer.params.imgWidth, webgazer.params.imgHeight);
+        // pass face features to backend using AJAX
+        // wait until backend determines a prediction
+        // return the prediction here
         if (regs.length === 0) {
             console.log('regression not set, call setRegression()');
             return null;
