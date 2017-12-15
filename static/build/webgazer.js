@@ -8227,7 +8227,6 @@ var mosseFilterResponses = function() {
         }
 
         var positions = this.clm.track(imageCanvas);
-        console.log("pos len:" + positions.length);
         var score = this.clm.getScore();
 
         if (!positions) {
@@ -10578,7 +10577,17 @@ var mosseFilterResponses = function() {
         }
         paintCurrentFrame(canvas, width, height);
         try {
-            return curTracker.getEyePatches(canvas, width, height);
+        	var positions = this.clm.track(imageCanvas)
+        	var positions = this.clm.track(imageCanvas);
+        	var score = this.clm.getScore();
+
+        if (!positions) {
+            return false;
+        }
+
+        return positions;
+
+        // return curTracker.getEyePatches(canvas, width, height);
         } catch(err) {
             console.log(err);
             return null;
@@ -10645,6 +10654,8 @@ var mosseFilterResponses = function() {
             console.log('regression not set, call setRegression()');
             return null;
         }
+
+        
         for (var reg in regs) {
             predictions.push(regs[reg].predict(features));
         }
