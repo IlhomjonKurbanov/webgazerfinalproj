@@ -8219,6 +8219,7 @@ var mosseFilterResponses = function() {
      * @param  {Number} height - of imageCanvas
      * @return {Object} the two eye-patches, first left, then right eye
      */
+     //IMPORTANT FUNCTION: THIS RETURNS THE EYE POSITIONS, MODIFY TO RETURN ALL FACIAL FEATURES
     ClmGaze.prototype.getEyePatches = function(imageCanvas, width, height) {
 
         if (imageCanvas.width === 0) {
@@ -8226,6 +8227,7 @@ var mosseFilterResponses = function() {
         }
 
         var positions = this.clm.track(imageCanvas);
+        console.log("pos len:" + positions.length);
         var score = this.clm.getScore();
 
         if (!positions) {
@@ -8767,6 +8769,7 @@ var mosseFilterResponses = function() {
         return this.data;
     };
 
+// TODO: find out how to modify this so that it takes in all
     /**
      * Try to predict coordinates from pupil data
      * after apply linear regression on data set
@@ -8804,8 +8807,8 @@ var mosseFilterResponses = function() {
         var predictedX = Math.floor((((leftSlopeX * leftPupilX) + leftIntersceptX) + ((rightSlopeX * rightPupilX) + rightIntersceptX))/2);
         var predictedY = Math.floor((((leftSlopeY * leftPupilY) + leftIntersceptY) + ((rightSlopeY * rightPupilY) + rightIntersceptY))/2);
         return {
-            x: predictedX,
-            y: predictedY
+            x: 0.5,
+            y: 0.5
         };
     };
 
@@ -10606,6 +10609,8 @@ var mosseFilterResponses = function() {
 
      /* TODO: check here, modify this function
      */
+     //IMPORTANT FUNCTION: THIS RETURNS THE PREDICTION X AND Y's
+
     function getPrediction(regModelIndex) {
         var predictions = [];
         var features = getPupilFeatures(videoElementCanvas, webgazer.params.imgWidth, webgazer.params.imgHeight);
@@ -10617,12 +10622,19 @@ var mosseFilterResponses = function() {
             predictions.push(regs[reg].predict(features));
         }
         if (regModelIndex !== undefined) {
+        	// console.log(predictions[regModelIndex].y);
             return predictions[regModelIndex] === null ? null : {
+            	// 'x' : 50,
+            	// 'y' : 50
                 'x' : predictions[regModelIndex].x,
                 'y' : predictions[regModelIndex].y
             };
         } else {
+        	
             return predictions.length === 0 || predictions[0] === null ? null : {
+            	// 'x' : 50,
+            	// 'y' : 50,
+            	// 'all' : 50
                 'x' : predictions[0].x,
                 'y' : predictions[0].y,
                 'all' : predictions
