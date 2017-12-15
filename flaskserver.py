@@ -12,12 +12,6 @@ app = Flask(__name__)
 model = None
 
 
-@app.route('/_add_numbers')
-def add_numbers():
-    a = request.args.get('a', 0, type=int)
-    b = request.args.get('b', 0, type=int)
-    return jsonify(result=a + b)
-
 
 @app.route('/')
 def index():
@@ -25,8 +19,11 @@ def index():
 
     return render_template('demo.html')
 
-@app.route('/_get_prediction')
+
+@app.route('/_get_predictions')
 def get_prediction():
+    global estimator
+
     ### TODO: TAILOR DATA TO AJAX
 
     # TODO: Convert JSON AJAX input to python dict:
