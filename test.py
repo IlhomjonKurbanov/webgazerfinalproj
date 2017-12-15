@@ -25,7 +25,7 @@ if __name__ == '__main__':
     ulip = tf.contrib.layers.real_valued_column("ulip", dimension=14, default_value=None, dtype=tf.int32, normalizer=None)
     llip = tf.contrib.layers.real_valued_column("llip", dimension=10, default_value=None, dtype=tf.int32, normalizer=None)
 
-    estimator = tf.estimator.DNNRegressor(        
+    estimator = tf.estimator.DNNRegressor(
     	feature_columns=[jaw, reyebrow, leyebrow, uleye, ureye, mreye, nose, ulip, llip],
         #WHAT ARE THESE??
         hidden_units=[1024, 512, 256],
@@ -61,9 +61,3 @@ if __name__ == '__main__':
 
     for i, p in enumerate(pred):
     	print("Prediction %s" % (p))
-
-
-
-
-
-
