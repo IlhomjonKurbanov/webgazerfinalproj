@@ -20,32 +20,62 @@ def index():
     return render_template('demo.html')
 
 
-@app.route('/_get_predictions')
+@app.route('/_get_predictions', methods=['POST'])
 def get_prediction():
     global estimator
+    featz = request.get_json()
 
-    ### TODO: TAILOR DATA TO AJAX
+    if not featz or len(featz) != 71:
 
-    # TODO: Convert JSON AJAX input to python dict:
+        return jsonify(result=[0.5,0.5])
+
+    # print("fdsafdsafds")
+    clmTrackerInt = []
+    for coord in featz:
+        clmTrackerInt.append(int(coord[0]))
+        clmTrackerInt.append(int(coord[1]))
+
+    jaw = clmTrackerInt[0:30]
+    reyebrow = clmTrackerInt[30:38]
+    leyebrow = clmTrackerInt[38:46]
+    uleye = clmTrackerInt[46:52]
+    mleye = clmTrackerInt[52:56]
+    ureye = clmTrackerInt[56:62]
+    mreye = clmTrackerInt[62:66]
+    nose = clmTrackerInt[66:88]
+    ulip = clmTrackerInt[88:102]
+    llip = clmTrackerInt[102:112]
+
+    features = {'jaw':[], 'reyebrow':[],'leyebrow':[],'uleye':[],'mleye':[],'ureye':[],'mreye':[],'nose':[],'ulip':[],'llip':[]}
+    features['jaw'].append(jaw)
+    features['reyebrow'].append(reyebrow)
+    features['leyebrow'].append(leyebrow)
+    features['uleye'].append(uleye)
+    features['mleye'].append(mleye)
+    features['ureye'].append(ureye)
+    features['mreye'].append(mreye)
+    features['nose'].append(nose)
+    features['ulip'].append(ulip)
+    features['llip'].append(llip)
+    for key in features:
+        features[key] = np.array(features[key])
 
 
-    # Convert input data to nparray dict format
-    for key in inputdata:
-        inputdata[key] = np.array(inputdata[key])
 
     input_fn_eval = tf.estimator.inputs.numpy_input_fn(
-        x=testdata,
+        x=features,
         num_epochs=1,
         shuffle=False)
 
     pred = estimator.predict(input_fn_eval)
 
-    # TODO: SEND AJAX REQUEST WITH ESTIMATOR DATA
+    x = 0
+    y = 0
+    for i, p in enumerate(pred):
+        coor = p["predictions"].tolist()
 
-    # for i, p in enumerate(pred):
-    # 	print("Prediction %s" % (p))
-
-    ####
+    print(coor)
+    return jsonify(result=[coor])
 
 
 def load_estimator():

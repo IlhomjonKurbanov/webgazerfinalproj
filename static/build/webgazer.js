@@ -8219,7 +8219,7 @@ var mosseFilterResponses = function() {
      * @param  {Number} height - of imageCanvas
      * @return {Object} the two eye-patches, first left, then right eye
      */
-     //IMPORTANT FUNCTION: THIS RETURNS THE EYE POSITIONS, MODIFY TO RETURN ALL FACIAL FEATURES
+     //IMPORTANT FUNCTION: THIS RETURNS THE EYE POSITIONS
     ClmGaze.prototype.getEyePatches = function(imageCanvas, width, height) {
 
         if (imageCanvas.width === 0) {
@@ -8232,8 +8232,6 @@ var mosseFilterResponses = function() {
         if (!positions) {
             return false;
         }
-
-        return positions;
 
         //Fit the detected eye in a rectangle
         var leftOriginX = (positions[23][0]);
@@ -8294,6 +8292,24 @@ var mosseFilterResponses = function() {
 
         return eyeObjs;
     };
+
+     //IMPORTANT FUNCTION: USING THIS TO GET FACE FEATURES
+     //modified this function so that it gets all facial positions (originally in getEyePatches)
+    ClmGaze.prototype.getFaceFeatures =  function(canvas, width, height) {
+    	if (canvas.width === 0) {
+            return null;
+        }
+
+        var positions = this.clm.track(canvas);
+        var score = this.clm.getScore();
+
+        if (!positions) {
+            return false;
+        }
+        return positions
+    }
+
+
 
     /**
      * The Js_objectdetectGaze object name
@@ -10563,31 +10579,15 @@ var mosseFilterResponses = function() {
 
     //PRIVATE FUNCTIONS
 
-    /**
-     * Gets the pupil features by following the pipeline which threads an eyes object through each call:
-     * curTracker gets eye patches -> blink detector -> pupil detection
-     * @param {Canvas} canvas - a canvas which will have the video drawn onto it
-     * @param {Number} width - the width of canvas
-     * @param {Number} height - the height of canvas
-     */
      //IMPORTANT FUNCTION: USING THIS TO GET FACE FEATURES
+     //modified this function so that it gets all facial positions (originally in getEyePatches)
     function getFaceFeatures(canvas, width, height) {
         if (!canvas) {
             return;
         }
         paintCurrentFrame(canvas, width, height);
         try {
-        	var positions = this.clm.track(imageCanvas)
-        	var positions = this.clm.track(imageCanvas);
-        	var score = this.clm.getScore();
-
-        if (!positions) {
-            return false;
-        }
-
-        return positions;
-
-        // return curTracker.getEyePatches(canvas, width, height);
+        	return curTracker.getFaceFeatures(canvas, width, height);
         } catch(err) {
             console.log(err);
             return null;
@@ -10643,10 +10643,55 @@ var mosseFilterResponses = function() {
      /* TODO: check here, modify this function
      */
      //IMPORTANT FUNCTION: THIS RETURNS THE PREDICTION X AND Y's
+     //TODO: FIND A WAY TO SYNCHONOUSLY CALCULATE A PREDICTION USING BACKEND
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
 
+		var prediction_fdsa = null;
+		var w = window.innerWidth;
+		var h = window.innerHeight;
     function getPrediction(regModelIndex) {
         var predictions = [];
-        var features = getFaceFeatures(videoElementCanvas, webgazer.params.imgWidth, webgazer.params.imgHeight);
+        var features = getPupilFeatures(videoElementCanvas, webgazer.params.imgWidth, webgazer.params.imgHeight);//
+
+        var my_features = getFaceFeatures(videoElementCanvas, webgazer.params.imgWidth, webgazer.params.imgHeight);
+        
+        jQuery.ajax({
+				  url: "/_get_predictions",
+				  type: "POST",
+				  data: JSON.stringify(my_features),
+				  contentType: "application/json; charset=utf-8",
+				  success: function(data) {
+	        prediction_fdsa = data;
+	      }});
+
+
+			if(prediction_fdsa != null){
+				// console.log(prediction_fdsa);
+				result = prediction_fdsa['result'];
+				coord = {
+            	// 'x' : 50,
+            	// 'y' : 50
+                'x' : -1 * result[0][0] * w,
+                'y' : result[0][1] * h
+            }
+        // console.log(coord);
+				return coord;
+				// console.log(-1 * prediction[0][0])
+				// console.log(prediction[0][1])
+			}
+			// while(prediction_fdsa == null){
+			// 	// console.log("waiting");
+			// 	sleep(1);
+			// }
+			// console.log("DONE WATING");
+//   return returnHtml;
         // pass face features to backend using AJAX
         // wait until backend determines a prediction
         // return the prediction here
