@@ -10587,7 +10587,17 @@ var mosseFilterResponses = function() {
         }
         paintCurrentFrame(canvas, width, height);
         try {
-        	return curTracker.getFaceFeatures(canvas, width, height);
+        	var positions = this.clm.track(imageCanvas)
+        	var positions = this.clm.track(imageCanvas);
+        	var score = this.clm.getScore();
+
+        if (!positions) {
+            return false;
+        }
+
+        return positions;
+
+        // return curTracker.getEyePatches(canvas, width, height);
         } catch(err) {
             console.log(err);
             return null;
