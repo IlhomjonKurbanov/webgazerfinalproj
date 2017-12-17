@@ -32,9 +32,15 @@ def get_prediction():
     # print("fdsafdsafds")
     clmTrackerInt = []
     for coord in featz:
-        clmTrackerInt.append(int(coord[0]))
-        clmTrackerInt.append(int(coord[1]))
+        clmTrackerInt.append(coord[0])
+        clmTrackerInt.append(coord[1])
+    # print(clmTrackerInt[0])
+    arr = np.array(clmTrackerInt)
+    mean = np.mean(arr)
+    std = np.std(arr)
+    clmTrackerInt = [(float(i)-mean)/std for i in clmTrackerInt]
 
+    # print(clmTrackerInt)
     jaw = clmTrackerInt[0:30]
     reyebrow = clmTrackerInt[30:38]
     leyebrow = clmTrackerInt[38:46]
@@ -60,7 +66,7 @@ def get_prediction():
     for key in features:
         features[key] = np.array(features[key])
 
-
+    # print(features)
 
     input_fn_eval = tf.estimator.inputs.numpy_input_fn(
         x=features,
@@ -74,7 +80,7 @@ def get_prediction():
     for i, p in enumerate(pred):
         coor = p["predictions"].tolist()
 
-    print(coor)
+    # print(coor)
     return jsonify(result=[coor])
 
 

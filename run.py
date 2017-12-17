@@ -5,7 +5,7 @@
 import numpy as np
 import argparse
 import os
-import cv2
+# import cv2
 import sys
 from glob import glob
 import csv
@@ -40,9 +40,11 @@ def get_data(train_or_test):
                         tobiiEyeGazeX = (tobiiLeftEyeGazeX + tobiiRightEyeGazeX) / 2
                         tobiiEyeGazeY = (tobiiLeftEyeGazeY + tobiiRightEyeGazeY) / 2
                         clmTracker = row[8:len(row)-1]
-                        clmTracker = [float(i) for i in clmTracker]
-                        clmTrackerInt = [int(i) for i in clmTracker]
-
+                        clmTrackerInt = [float(i) for i in clmTracker]
+                        arr = np.array(clmTrackerInt)
+                        mean = np.mean(arr)
+                        std = np.std(arr)
+                        clmTrackerInt = [(float(i)-mean)/std for i in clmTrackerInt]
                         # Jaw
                         jaw = clmTrackerInt[0:30]
                         # for i in range(0,28,2):
@@ -104,9 +106,10 @@ def get_data(train_or_test):
                         features['ulip'].append(ulip)
                         features['llip'].append(llip)
                         if j == 0 :
-                            print features
+                            # print(features)
                             j += 1
                         label = [tobiiEyeGazeX, tobiiEyeGazeY]
+                        # print(label)
                         labels.append(label)
     for key in features:
         features[key] = np.array(features[key])

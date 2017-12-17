@@ -448,16 +448,16 @@ node {
     value {
       list {
         type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
         type: DT_DOUBLE
       }
     }
@@ -603,7 +603,7 @@ node {
   attr {
     key: "dtype"
     value {
-      type: DT_INT64
+      type: DT_DOUBLE
     }
   }
   attr {
@@ -632,7 +632,7 @@ node {
   attr {
     key: "dtype"
     value {
-      type: DT_INT64
+      type: DT_DOUBLE
     }
   }
   attr {
@@ -661,7 +661,7 @@ node {
   attr {
     key: "dtype"
     value {
-      type: DT_INT64
+      type: DT_DOUBLE
     }
   }
   attr {
@@ -690,7 +690,7 @@ node {
   attr {
     key: "dtype"
     value {
-      type: DT_INT64
+      type: DT_DOUBLE
     }
   }
   attr {
@@ -719,7 +719,7 @@ node {
   attr {
     key: "dtype"
     value {
-      type: DT_INT64
+      type: DT_DOUBLE
     }
   }
   attr {
@@ -748,7 +748,7 @@ node {
   attr {
     key: "dtype"
     value {
-      type: DT_INT64
+      type: DT_DOUBLE
     }
   }
   attr {
@@ -777,7 +777,7 @@ node {
   attr {
     key: "dtype"
     value {
-      type: DT_INT64
+      type: DT_DOUBLE
     }
   }
   attr {
@@ -806,7 +806,7 @@ node {
   attr {
     key: "dtype"
     value {
-      type: DT_INT64
+      type: DT_DOUBLE
     }
   }
   attr {
@@ -835,7 +835,7 @@ node {
   attr {
     key: "dtype"
     value {
-      type: DT_INT64
+      type: DT_DOUBLE
     }
   }
   attr {
@@ -864,7 +864,7 @@ node {
   attr {
     key: "dtype"
     value {
-      type: DT_INT64
+      type: DT_DOUBLE
     }
   }
   attr {
@@ -927,16 +927,16 @@ node {
     value {
       list {
         type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
         type: DT_DOUBLE
       }
     }
@@ -1146,7 +1146,7 @@ node {
         dtype: DT_FLOAT
         tensor_shape {
         }
-        float_val: 0.00133333331905
+        float_val: 0.0013333333190530539
       }
     }
   }
@@ -1368,16 +1368,16 @@ node {
     value {
       list {
         type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
-        type: DT_INT64
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
+        type: DT_DOUBLE
         type: DT_DOUBLE
       }
     }
@@ -1403,7 +1403,7 @@ node {
   attr {
     key: "SrcT"
     value {
-      type: DT_INT64
+      type: DT_DOUBLE
     }
   }
   attr {
@@ -1735,7 +1735,7 @@ node {
   attr {
     key: "SrcT"
     value {
-      type: DT_INT64
+      type: DT_DOUBLE
     }
   }
   attr {
@@ -2067,7 +2067,7 @@ node {
   attr {
     key: "SrcT"
     value {
-      type: DT_INT64
+      type: DT_DOUBLE
     }
   }
   attr {
@@ -2399,7 +2399,7 @@ node {
   attr {
     key: "SrcT"
     value {
-      type: DT_INT64
+      type: DT_DOUBLE
     }
   }
   attr {
@@ -2731,7 +2731,7 @@ node {
   attr {
     key: "SrcT"
     value {
-      type: DT_INT64
+      type: DT_DOUBLE
     }
   }
   attr {
@@ -3063,7 +3063,7 @@ node {
   attr {
     key: "SrcT"
     value {
-      type: DT_INT64
+      type: DT_DOUBLE
     }
   }
   attr {
@@ -3395,7 +3395,7 @@ node {
   attr {
     key: "SrcT"
     value {
-      type: DT_INT64
+      type: DT_DOUBLE
     }
   }
   attr {
@@ -3727,7 +3727,7 @@ node {
   attr {
     key: "SrcT"
     value {
-      type: DT_INT64
+      type: DT_DOUBLE
     }
   }
   attr {
@@ -4059,7 +4059,7 @@ node {
   attr {
     key: "SrcT"
     value {
-      type: DT_INT64
+      type: DT_DOUBLE
     }
   }
   attr {
@@ -4532,7 +4532,7 @@ node {
         dtype: DT_FLOAT
         tensor_shape {
         }
-        float_val: -0.0728035271168
+        float_val: -0.07280352711677551
       }
     }
   }
@@ -4570,7 +4570,7 @@ node {
         dtype: DT_FLOAT
         tensor_shape {
         }
-        float_val: 0.0728035271168
+        float_val: 0.07280352711677551
       }
     }
   }
@@ -6516,7 +6516,7 @@ node {
         dtype: DT_FLOAT
         tensor_shape {
         }
-        float_val: -0.0883883461356
+        float_val: -0.0883883461356163
       }
     }
   }
@@ -6554,7 +6554,7 @@ node {
         dtype: DT_FLOAT
         tensor_shape {
         }
-        float_val: 0.0883883461356
+        float_val: 0.0883883461356163
       }
     }
   }
@@ -7508,7 +7508,7 @@ node {
         dtype: DT_FLOAT
         tensor_shape {
         }
-        float_val: -0.152498573065
+        float_val: -0.15249857306480408
       }
     }
   }
@@ -7546,7 +7546,7 @@ node {
         dtype: DT_FLOAT
         tensor_shape {
         }
-        float_val: 0.152498573065
+        float_val: 0.15249857306480408
       }
     }
   }
@@ -13520,7 +13520,7 @@ node {
             size: 1024
           }
         }
-        float_val: 0.10000000149
+        float_val: 0.10000000149011612
       }
     }
   }
@@ -13703,7 +13703,7 @@ node {
             size: 1024
           }
         }
-        float_val: 0.10000000149
+        float_val: 0.10000000149011612
       }
     }
   }
@@ -13880,7 +13880,7 @@ node {
             size: 512
           }
         }
-        float_val: 0.10000000149
+        float_val: 0.10000000149011612
       }
     }
   }
@@ -14063,7 +14063,7 @@ node {
             size: 512
           }
         }
-        float_val: 0.10000000149
+        float_val: 0.10000000149011612
       }
     }
   }
@@ -14240,7 +14240,7 @@ node {
             size: 256
           }
         }
-        float_val: 0.10000000149
+        float_val: 0.10000000149011612
       }
     }
   }
@@ -14423,7 +14423,7 @@ node {
             size: 256
           }
         }
-        float_val: 0.10000000149
+        float_val: 0.10000000149011612
       }
     }
   }
@@ -14600,7 +14600,7 @@ node {
             size: 2
           }
         }
-        float_val: 0.10000000149
+        float_val: 0.10000000149011612
       }
     }
   }
@@ -14783,7 +14783,7 @@ node {
             size: 2
           }
         }
-        float_val: 0.10000000149
+        float_val: 0.10000000149011612
       }
     }
   }
@@ -14941,7 +14941,7 @@ node {
         dtype: DT_FLOAT
         tensor_shape {
         }
-        float_val: 0.10000000149
+        float_val: 0.10000000149011612
       }
     }
   }
@@ -14972,7 +14972,7 @@ node {
         dtype: DT_FLOAT
         tensor_shape {
         }
-        float_val: 0.0010000000475
+        float_val: 0.0010000000474974513
       }
     }
   }
@@ -18445,7 +18445,7 @@ node {
         dtype: DT_STRING
         tensor_shape {
         }
-        string_val: "_temp_ce2d8167a02b41eea6e9665a0fd9a1d8/part"
+        string_val: "_temp_20e4323bdf4d462ab22eb58e48b001d8/part"
       }
     }
   }

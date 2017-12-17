@@ -8301,6 +8301,7 @@ var mosseFilterResponses = function() {
         }
 
         var positions = this.clm.track(canvas);
+        // console.log(positions[0][0])
         var score = this.clm.getScore();
 
         if (!positions) {
@@ -10587,15 +10588,7 @@ var mosseFilterResponses = function() {
         }
         paintCurrentFrame(canvas, width, height);
         try {
-        	var positions = this.clm.track(imageCanvas)
-        	var positions = this.clm.track(imageCanvas);
-        	var score = this.clm.getScore();
-
-        if (!positions) {
-            return false;
-        }
-
-        return positions;
+        	return curTracker.getFaceFeatures(canvas, width, height);
 
         // return curTracker.getEyePatches(canvas, width, height);
         } catch(err) {
@@ -10666,20 +10659,26 @@ function sleep(milliseconds) {
 		var prediction_fdsa = null;
 		var w = window.innerWidth;
 		var h = window.innerHeight;
+		var requestReturned = true
     function getPrediction(regModelIndex) {
         var predictions = [];
         var features = getPupilFeatures(videoElementCanvas, webgazer.params.imgWidth, webgazer.params.imgHeight);//
 
         var my_features = getFaceFeatures(videoElementCanvas, webgazer.params.imgWidth, webgazer.params.imgHeight);
-        
-        jQuery.ajax({
-				  url: "/_get_predictions",
-				  type: "POST",
-				  data: JSON.stringify(my_features),
-				  contentType: "application/json; charset=utf-8",
-				  success: function(data) {
-	        prediction_fdsa = data;
-	      }});
+        if(requestReturned == true){
+        	requestReturned = false
+	        jQuery.ajax({
+					  url: "/_get_predictions",
+					  type: "POST",
+					  data: JSON.stringify(my_features),
+					  contentType: "application/json; charset=utf-8",
+					  success: function(data) {
+		        prediction_fdsa = data;
+		        console.log(prediction_fdsa['result'][0][0],prediction_fdsa['result'][0][1])
+		      }}).always(function() {
+	            requestReturned = true;
+	        });
+        }
 
 
 			if(prediction_fdsa != null){
@@ -10688,7 +10687,7 @@ function sleep(milliseconds) {
 				coord = {
             	// 'x' : 50,
             	// 'y' : 50
-                'x' : -1 * result[0][0] * w,
+                'x' : result[0][0] * w,
                 'y' : result[0][1] * h
             }
         // console.log(coord);
