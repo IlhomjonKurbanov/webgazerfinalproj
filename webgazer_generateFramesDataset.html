@@ -1,0 +1,290 @@
+<!DOCTYPE HTML>
+<HTML>
+
+<HEAD>
+    <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+    <TITLE>Testing WebGazer on a dataset with user videos and logs of user interactions</TITLE>
+    <style>
+        #myMouse {
+            width: 0px;
+            height: 0px;
+            position: absolute;
+            background-color: yellow;
+            z-index: 99;
+        }
+    </style>
+</HEAD>
+
+<BODY LANG="en-US" LINK="#0000ff" DIR="LTR">
+    <div id="myMouse"></div>
+    <script src="jquery-3.1.1.min.js"></script>
+    <!-- 
+        NOTE: To test your changes to WebGazer, make them, then replace this line with your version of WebGazer. 
+              Then, run webserver_testAccuracy.py, and open this file (webgazerTester.html) in the browser.
+    -->
+    <script src="webgazer.js"></script>
+
+    <script>
+        // [James] Nuke local storage.
+        // While it's convenient, it's not helping me right now.
+        window.localStorage.clear();
+        
+        var video_start_time = performance.now();
+        var log_start_time = 0;
+        var count = 0;
+        var video_list = "";
+        var participant_prev = "";
+        var participant_count = 0;
+        var logs = "";
+        var counter_logs = "";
+        var original_logs = "";
+       
+
+        $.ajax({
+            dataType: "json",
+            url: "event_logs.json",
+            async: false,
+            success: function(data) {
+                original_logs = data;
+            }
+        });
+
+
+        if (JSON.parse(window.localStorage.getItem("active_video")) == null) {
+            var count = 0;
+            var active_video = 0;
+            var active_log = -1;
+
+            $.ajax({
+                dataType: "json",
+                url: "video_list.json",
+                async: false,
+                success: function(data) {
+                    video_list = data;
+                }
+            });
+
+            $.ajax({
+                dataType: "json",
+                url: "counter_logs.json",
+                async: false,
+                success: function(data) {
+                    counter_logs = data;
+                }
+            });
+            window.localStorage.setItem("counter_logs", JSON.stringify(counter_logs));
+            window.localStorage.setItem("logs", JSON.stringify(original_logs.slice(counter_logs[0][0], counter_logs[0][1])));
+            window.localStorage.setItem("video_list", JSON.stringify(video_list));
+            window.localStorage.setItem("active_video", JSON.stringify(active_video));
+            window.localStorage.setItem("active_log", JSON.stringify(active_log));
+        } 
+        else 
+        {
+            var active_video = JSON.parse(localStorage.getItem("active_video"));
+            var active_log = JSON.parse(localStorage.getItem("active_log"));
+            logs = JSON.parse(localStorage.getItem("logs"));
+            video_list = JSON.parse(localStorage.getItem("video_list"));
+            counter_logs = JSON.parse(localStorage.getItem("counter_logs"));
+        }
+
+
+        $(window).on("load", function() {
+            webgazer.setRegression('ridge')
+                .setTracker('clmtrackr')
+                .setGazeListener(function(data, clock) 
+                {
+                    //console.log(data); /* data is an object containing an x and y key which are the x and y prediction coordinates (no bounds limiting) */
+                    //console.log(performance.now() - video_start_time + log_start_time); /* elapsed time in milliseconds since webgazer.begin() was called */
+                    //IMPORTANT TIP: You can log the data.x and data.y predictions on the logs of your localhost or server where you're hosting this page
+                    
+                    // James: Use (wgVideo.currentTime * 1000) + log_start_time; as a measure of how far into the video you actually are.
+                   
+                    var clmPos = webgazer.getCLMPositions();
+                    var wgVideo = webgazer.getVideoElement();
+                    var wgCanvas = webgazer.getVideoElementCanvas();
+                    if (data != null && clmPos != null && wgCanvas != null) 
+                    {
+                        // Bad way to measure which time in the video is currently playing, because the browser plays frames unevenly
+                        // var epoch = performance.now() - video_start_time + log_start_time;
+
+                        // Good way, by taking the browser's estimated time through the video
+                        var epoch = (wgVideo.currentTime * 1000) + log_start_time;
+                        var temp_image = new Image();
+
+                        // Reduce the precision of the facial feature point position string to 2dp to send over (and store server side)
+                        clmPosStr = "";
+                        for( i = 0; i < clmPos.length; i++ )
+                        {
+                            clmPosStr = clmPosStr + Number( clmPos[i][0] ).toFixed(2) + "," + Number( clmPos[i][1] ).toFixed(2) + ","
+                        }
+
+                        temp_image.src = "http://127.0.0.1:8000/" + "Webgazer?epoch=" + epoch + "&video=" + video_list[active_video] + "&predX=" + data.x + "&predY=" + data.y + "&clmPos=" + clmPosStr + "&image=" + wgCanvas.toDataURL("image/jpeg");
+                    }
+                    else
+                        return webgazer;
+                })
+                .setStaticVideo(video_list[active_video])
+                .begin()
+                .removeMouseEventListeners()
+                .showPredictionPoints(true) /* shows a square every 100 milliseconds where current prediction is */
+
+            // [James] Why are these magic numbers ?!?!
+            var width = 640;
+            var height = 480;
+            var topDist = '0px';
+            var leftDist = '0px';
+
+            var setup = function() {
+                var video = document.getElementById('webgazerVideoFeed');
+                video.style.display = 'block';
+                video.style.position = 'absolute';
+                video.style.top = topDist;
+                video.style.left = leftDist;
+                video.width = width;
+                video.height = height;
+                video.style.margin = '0px';
+
+                webgazer.params.imgWidth = width;
+                webgazer.params.imgHeight = height;
+
+                var overlay = document.createElement('canvas');
+                overlay.id = 'overlay';
+                overlay.style.position = 'absolute';
+                overlay.width = width;
+                overlay.height = height;
+                overlay.style.top = topDist;
+                overlay.style.left = leftDist;
+                overlay.style.margin = '0px';
+
+                document.body.appendChild(overlay);
+
+                var cl = webgazer.getTracker().clm;
+
+                active_video = JSON.parse(localStorage.getItem("active_video"));
+                active_log = JSON.parse(localStorage.getItem("active_log"));
+                logs = JSON.parse(localStorage.getItem("logs"));
+                video_list = JSON.parse(localStorage.getItem("video_list"));
+                counter_logs = JSON.parse(localStorage.getItem("counter_logs"));
+
+                video.addEventListener('ended', function(e) 
+                {
+                    // 'Prev' video
+                    videoFileNamePrev = video_list[active_video];
+                    videoFileNameParticipantPrev = videoFileNamePrev.substring( 0, videoFileNamePrev.indexOf('/') );
+
+                    // Update the new active video index
+                    active_video++;
+                    // Check that we're not at the end...
+                    if (active_video >= video_list.length) 
+                    {
+                        window.localStorage.clear();
+                        //ended = true;
+                        return;
+                    }
+
+                    // Current video
+                    videoFileName = video_list[active_video];
+                    videoFileNameParticipant = videoFileName.substring( 0, videoFileName.indexOf('/') );
+
+                    // If we changed participant when we changed video
+                    if (videoFileNameParticipantPrev != videoFileNameParticipant )
+                    {
+                        participant_count++;
+
+                        window.localStorage.setItem("active_video", JSON.stringify(active_video));
+                        window.localStorage.setItem("active_log", JSON.stringify(active_log));
+                        window.localStorage.setItem("logs", JSON.stringify(original_logs.slice(counter_logs[participant_count][0], counter_logs[participant_count][1])));
+                        window.localStorage.setItem("counter_logs", JSON.stringify(counter_logs));
+                    }
+                    
+                    // Reset the tracker ready for the next video
+                    cl.reset();
+
+                    video.src = video_list[active_video];
+                    video.play();
+                    video_start_time = performance.now();
+                });
+
+                function event_log_loop() 
+                {
+                    if (typeof webgazer == 'undefined') {
+                        return;
+                    }
+                    
+                    var mouseImg = document.getElementById("myMouse");
+                    // Align active video with active log
+                    // active_log contains the number of "recording start" commands in the log.
+                    while (active_video > active_log) 
+                    {
+                        if (logs[count].type == "recording start") 
+                        {
+                            active_log++;
+                            log_start_time = logs[count].epoch;
+                        }
+                        count++
+                    }
+                    
+                    // No no no...
+                    ///var video_elapsed_time = performance.now() - video_start_time;
+                    var video_elapsed_time = webgazer.getVideoElement().currentTime * 1000;
+                    while (count < logs.length && active_log == active_video && (logs[count].epoch - log_start_time) < video_elapsed_time) 
+                    {
+                        switch (logs[count].type) {
+                            case "mouseclick":
+                                webgazer.recordScreenPosition(logs[count].clientX, logs[count].clientY, "click");
+                                mouseImg.style.height = '50px';
+                                mouseImg.style.width = '50px';
+                                mouseImg.style.top = logs[count].clientY + 'px';
+                                mouseImg.style.left = logs[count].clientX + 'px';
+                                break;
+                            case "mousemove":
+                                webgazer.recordScreenPosition(logs[count].clientX, logs[count].clientY, "move");
+                                mouseImg.style.height = '25px';
+                                mouseImg.style.width = '25px';
+                                mouseImg.style.top = logs[count].clientY + 'px';
+                                mouseImg.style.left = logs[count].clientX + 'px';
+                                break;
+                            case "textInput":
+                                //IMPORTANT: CHANGE WEBGAZER.js CODE IF WANT TO INCLUDE TYPING
+                                mouseImg.style.height = '25px';
+                                mouseImg.style.width = '5px';
+                                mouseImg.style.top = logs[count].pos.top + 'px';
+                                mouseImg.style.left = logs[count].pos.left + 'px';
+                                break;
+                            case "recording start":
+                                active_log++
+                                break;
+                        }
+                        count++
+                    }
+
+                    // [James] Note that the clmTracker visualizer on this webpage is a frame (or two) behind, but the actual tracker is not.
+                    requestAnimationFrame(event_log_loop);
+                    overlay.getContext('2d').clearRect(0, 0, width, height);
+                    if (cl.getCurrentPosition()) 
+                    {
+                        cl.draw(overlay);
+                    }
+                }
+                event_log_loop();
+            };
+
+            function checkIfReady() 
+            {
+                if (webgazer.isReady()) 
+                {
+                    video_start_time = performance.now();
+                    setup();
+                } 
+                else 
+                {
+                    setTimeout(checkIfReady, 100);
+                }
+            }
+            setTimeout(checkIfReady, 100);
+        });
+    </script>
+
+</BODY>
+
+</HTML>

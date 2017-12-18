@@ -8,6 +8,7 @@ import numpy as np
 
 directory = "./csvtest/"
 totalError = 0
+totalAcc = 0
 i = 0
 for dirpath,_,filename in os.walk(directory):
     for f in filename:
@@ -32,11 +33,14 @@ for dirpath,_,filename in os.walk(directory):
 	    		webgazerPoint = np.array([webgazerX, webgazerY])
 	    		tobiiPoint = np.array([tobiiEyeGazeX, tobiiEyeGazeY])
 	    		error = abs(np.linalg.norm(webgazerPoint-tobiiPoint))
+	    		acc = 1 - error
 	    		totalError += error
+	    		totalAcc += acc
 
 avgError = totalError / i
-print(totalError)
-print(avgError)
+avgAcc = totalAcc / i
+
+print("%d Avg accuracy for webgazer is: %f" ) %(avgAcc)
 
         	
 	    	       
