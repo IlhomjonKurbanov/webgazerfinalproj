@@ -39,8 +39,8 @@ for dirpath,_,filename in os.walk(directory):
 
 avgError = totalError / i
 avgAcc = totalAcc / i
-
-print("%d Avg accuracy for webgazer is: %f" ) %(avgAcc)
+# print ("avgError: %s" %avgError)
+print ("WebGazer Average Accuracy: %s " %avgAcc)
 
         	
 	    	       
