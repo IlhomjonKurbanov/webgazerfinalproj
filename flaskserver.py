@@ -107,6 +107,7 @@ def load_estimator():
           learning_rate=0.1,
           l1_regularization_strength=0.001
         ),
+        dropout = 0.5, 
         label_dimension=2,
         model_dir = "model")
 
