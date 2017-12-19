@@ -117,7 +117,7 @@ def get_data(train_or_test):
 
 
 if __name__ == '__main__':
-    data_train = get_data('train')
+    data_train = get_data('test')
 
     # TODO is this right?
     jaw = tf.contrib.layers.real_valued_column("jaw", dimension=30, default_value=None, dtype=tf.int32, normalizer=None)
@@ -159,7 +159,7 @@ if __name__ == '__main__':
     # TODO what is the difference between steps and epochs
     estimator.train(input_fn=input_fn_train, steps=1000)
 
-    data_test = get_data('test')
+    data_test = get_data('train')
 
     input_fn_eval = tf.estimator.inputs.numpy_input_fn(
         x=data_test[0],
